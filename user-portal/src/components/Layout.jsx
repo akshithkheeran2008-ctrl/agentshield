@@ -1,18 +1,17 @@
 import { useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
-import { Shield, LogOut, Home, ListChecks, CircleHelp, FlaskConical, LayoutDashboard, Inbox, Users, ScrollText, ShieldCheck, Sun, Moon, Menu, X, LayoutGrid, Monitor, Layers, Info } from 'lucide-react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { LogOut, Home, ListChecks, CircleHelp, FlaskConical, LayoutDashboard, Inbox, Users, ScrollText, ShieldCheck, Sun, Moon, Menu, X, LayoutGrid, Monitor, Layers, Info, Cpu } from 'lucide-react'
 import { useStore } from '../store.jsx'
 import { currentTheme, applyTheme } from '../lib/theme.js'
+import { Badge, cx } from './ui.jsx'
 
 function Brand({ home }) {
   return (
-    <Link to={home} className="flex items-center gap-2.5">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
-        <Shield className="h-6 w-6" />
-      </span>
+    <Link to={home} className="flex items-center gap-2.5" aria-label="AgentShield home">
+      <img src="/shield.svg" alt="" className="h-8 w-8" />
       <span className="leading-tight">
-        <span className="block text-[17px] font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Zer0-Neuro</span>
-        <span className="block text-xs font-semibold text-blue-700 dark:text-blue-400">AgentShield</span>
+        <span className="block text-[15px] font-bold tracking-tight text-slate-900 dark:text-white">Zer0-Neuro</span>
+        <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500 dark:text-slate-500">AgentShield</span>
       </span>
     </Link>
   )
@@ -47,12 +46,13 @@ function NavItem({ n, awaiting, onNavigate }) {
       to={n.to}
       end={n.end}
       onClick={onNavigate}
-      className={({ isActive }) => `navlink ${isActive ? 'active' : ''}`}
+      className={({ isActive }) => cx('flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
+        isActive ? 'bg-blue-500/10 text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200')}
     >
-      <n.icon className="h-4 w-4 shrink-0" />
+      <n.icon size={16} />
       <span className="min-w-0 flex-1 truncate">{n.label}</span>
       {n.to === '/admin/queue' && awaiting > 0 && (
-        <span className="ml-1 shrink-0 rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">{awaiting}</span>
+        <span className="ml-auto rounded-full bg-amber-500/15 px-1.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">{awaiting}</span>
       )}
     </NavLink>
   )
@@ -61,8 +61,8 @@ function NavItem({ n, awaiting, onNavigate }) {
 function NavSection({ label, nav, awaiting, onNavigate }) {
   return (
     <div>
-      <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">{label}</p>
-      <nav className="space-y-1" aria-label="Main">
+      <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-600">{label}</div>
+      <nav className="space-y-0.5" aria-label="Main">
         {nav.map((n) => (
           <NavItem key={n.to} n={n} awaiting={awaiting} onNavigate={onNavigate} />
         ))}
@@ -73,8 +73,8 @@ function NavSection({ label, nav, awaiting, onNavigate }) {
 
 function AdminNav({ awaiting, onNavigate }) {
   return (
-    <div className="space-y-5">
-      <nav className="space-y-1" aria-label="Product">
+    <div className="space-y-0.5">
+      <nav className="space-y-0.5" aria-label="Product">
         <NavItem n={ADMIN_OVERVIEW} awaiting={awaiting} onNavigate={onNavigate} />
       </nav>
       <NavSection label="Security Console" nav={ADMIN_CONSOLE} awaiting={awaiting} onNavigate={onNavigate} />
@@ -83,89 +83,101 @@ function AdminNav({ awaiting, onNavigate }) {
   )
 }
 
-function SidebarFooter({ session, isAdmin, initials, theme, setTheme, signOut, threatLevel }) {
-  const threatTone =
-    threatLevel === 'HIGH'
-      ? 'text-red-600 dark:text-red-400'
-      : threatLevel === 'MEDIUM'
-        ? 'text-amber-600 dark:text-amber-400'
-        : 'text-emerald-700 dark:text-emerald-400'
+function Sidebar({ open, onClose, isAdmin, awaiting, threatLevel, session, initials, children }) {
   return (
-    <div className="mt-auto space-y-3 px-4 pb-5 pt-4">
-      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3">
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 pulse-dot" /> System Status
+    <>
+      <div className={cx('fixed inset-0 z-30 bg-black/60 lg:hidden', open ? 'block' : 'hidden')} onClick={onClose} />
+      <aside className={cx('fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-200 dark:border-white/[0.06] bg-white dark:bg-[#0a0f1c]/95 backdrop-blur transition-transform lg:translate-x-0', open ? 'translate-x-0' : '-translate-x-full')} aria-label="Main navigation">
+        <div className="flex h-16 items-center justify-between px-5">
+          <Brand home={isAdmin ? '/admin' : '/'} />
+          <button className="text-slate-400 lg:hidden" onClick={onClose} aria-label="Close menu"><X size={18} /></button>
         </div>
-        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">All systems operational</p>
-        {isAdmin && (
-          <dl className="mt-2 space-y-1 border-t border-slate-200 dark:border-slate-700 pt-2 text-xs">
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-slate-500 dark:text-slate-400">Engine</dt>
-              <dd className="font-semibold text-slate-700 dark:text-slate-300">In-browser</dd>
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-slate-500 dark:text-slate-400">AgentShield Environment</dt>
-              <dd className="font-semibold text-slate-700 dark:text-slate-300">SANDBOX</dd>
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-slate-500 dark:text-slate-400">System</dt>
-              <dd className="font-semibold text-emerald-700 dark:text-emerald-400">PROTECTED</dd>
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-slate-500 dark:text-slate-400">Threat Level</dt>
-              <dd className={`font-bold ${threatTone}`}>{threatLevel}</dd>
-            </div>
-          </dl>
-        )}
-      </div>
-
-      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">{initials}</span>
-          <span className="min-w-0 flex-1 leading-tight">
-            <span className="block truncate text-sm font-bold text-slate-800 dark:text-slate-200">{session?.name}</span>
-            <span className="block truncate text-[11px] text-slate-500 dark:text-slate-400">{session?.email}</span>
-          </span>
-          {!isAdmin && (
-            <span className="shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">
-              User
-            </span>
+        <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-3">
+          {isAdmin ? <AdminNav awaiting={awaiting} onNavigate={onClose} /> : <NavSection label="Your Account" nav={USER_NAV} awaiting={awaiting} onNavigate={onClose} />}
+        </nav>
+        <div className="m-3 rounded-xl border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] p-3.5">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-500">System Status</div>
+          <div className="mt-2 flex items-center gap-2 text-sm text-slate-800 dark:text-slate-200"><span className="pulse-dot h-2 w-2 rounded-full bg-emerald-400" />All Systems Operational</div>
+          {isAdmin && (
+            <dl className="mt-2 space-y-1 border-t border-slate-200 dark:border-white/[0.06] pt-2 text-[11px]">
+              <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-500"><Cpu size={12} />Engine: <span className="font-semibold text-slate-700 dark:text-slate-300">In-browser</span></div>
+              <div className="flex justify-between gap-2"><dt className="text-slate-500 dark:text-slate-500">AgentShield Environment</dt><dd className="font-semibold text-slate-700 dark:text-slate-300">SANDBOX</dd></div>
+              <div className="flex justify-between gap-2"><dt className="text-slate-500 dark:text-slate-500">System</dt><dd className="font-semibold text-emerald-600 dark:text-emerald-400">PROTECTED</dd></div>
+              <div className="flex justify-between gap-2"><dt className="text-slate-500 dark:text-slate-500">Threat Level</dt><dd className={cx('font-bold', threatLevel === 'HIGH' ? 'text-red-600 dark:text-red-400' : threatLevel === 'MEDIUM' ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400')}>{threatLevel}</dd></div>
+            </dl>
           )}
         </div>
-        {isAdmin && (
-          <div className="mt-2.5 rounded-full bg-violet-100 dark:bg-violet-900/40 px-2.5 py-1 text-center text-[11px] font-bold text-violet-800 dark:text-violet-300">
-            ZN Zer0-Neuro SOC Analyst
-          </div>
-        )}
-        <div className="mt-3 flex gap-2">
-          <button
-            type="button"
-            className="btn btn-ghost flex-1 !px-2 !py-1.5 text-xs"
-            onClick={() => setTheme(applyTheme(theme === 'dark' ? 'light' : 'dark'))}
-            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            {theme === 'dark' ? 'Light' : 'Dark'}
-          </button>
-          <button type="button" className="btn btn-ghost flex-1 !px-2 !py-1.5 text-xs" onClick={signOut} title="Sign out / switch account">
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
-        </div>
-      </div>
+        {children}
+      </aside>
+    </>
+  )
+}
 
-      <p className="text-center text-[11px] font-medium text-slate-500 dark:text-slate-400">AgentShield v1.0 · Zer0-Neuro</p>
+function SidebarAccount({ session, isAdmin, initials }) {
+  return (
+    <div className="mx-3 mb-3 rounded-xl border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] p-3">
+      <div className="flex items-center gap-2.5">
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-blue-600 text-[11px] font-bold text-white">{initials}</span>
+        <span className="min-w-0 flex-1 leading-tight">
+          <span className="block truncate text-xs font-semibold text-slate-800 dark:text-slate-200">{session?.name}</span>
+          <span className="block truncate text-[10px] text-slate-500 dark:text-slate-500">{session?.email}</span>
+        </span>
+        {!isAdmin && (
+          <span className="shrink-0 rounded-full bg-blue-500/10 px-2 py-0.5 text-[11px] font-bold text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">User</span>
+        )}
+      </div>
+      {isAdmin && (
+        <div className="mt-2.5 rounded-full bg-violet-500/10 px-2.5 py-1 text-center text-[11px] font-bold text-violet-700 dark:text-violet-300 ring-1 ring-inset ring-violet-500/20">
+          ZN Zer0-Neuro SOC Analyst
+        </div>
+      )}
+      <p className="mt-2.5 text-center text-[11px] font-medium text-slate-500 dark:text-slate-500">AgentShield v1.0 · Zer0-Neuro</p>
     </div>
+  )
+}
+
+function TopBar({ onMenu, threatLevel, theme, setTheme, signOut }) {
+  const threatValue = threatLevel === 'HIGH' ? 'HIGH' : threatLevel === 'MEDIUM' ? 'MEDIUM' : 'SAFE'
+  return (
+    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 dark:border-white/[0.06] bg-white/80 dark:bg-[#070b14]/80 px-4 backdrop-blur md:px-6">
+      <button className="text-slate-500 dark:text-slate-400 lg:hidden" onClick={onMenu} aria-label="Open menu"><Menu size={20} /></button>
+      <div className="hidden text-sm font-semibold text-slate-900 dark:text-white sm:block">AgentShield</div>
+      <div className="hidden items-center gap-2 md:flex">
+        <span className="text-xs text-slate-500 dark:text-slate-500">Environment</span><Badge value="INFO">SANDBOX</Badge>
+        <span className="ml-2 text-xs text-slate-500 dark:text-slate-500">System</span><Badge value="SAFE" dot>PROTECTED</Badge>
+      </div>
+      <div className="ml-auto flex items-center gap-2 md:gap-3">
+        <span className="hidden text-xs text-slate-500 dark:text-slate-500 sm:inline">Threat Level</span>
+        <Badge value={threatValue}>{threatLevel}</Badge>
+        <button
+          type="button"
+          className="grid h-9 w-9 place-items-center rounded-lg text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
+          onClick={() => setTheme(applyTheme(theme === 'dark' ? 'light' : 'dark'))}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
+        <button
+          type="button"
+          className="grid h-9 w-9 place-items-center rounded-lg text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
+          onClick={signOut}
+          title="Sign out / switch account"
+          aria-label="Sign out"
+        >
+          <LogOut size={17} />
+        </button>
+      </div>
+    </header>
   )
 }
 
 export default function Layout() {
   const { session, signOut, store } = useStore()
   const [theme, setTheme] = useState(currentTheme)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const loc = useLocation()
   const isAdmin = session?.role === 'admin'
-  const nav = USER_NAV
-  const sectionLabel = 'Your Account'
   const awaiting = store.requests.filter((r) => r.status === 'awaiting').length
   const awaitingReqs = store.requests.filter((r) => r.status === 'awaiting')
   const threatLevel = awaitingReqs.some((r) => r.scan.score >= 60)
@@ -176,55 +188,18 @@ export default function Layout() {
   const initials = isAdmin
     ? 'ZN'
     : (session?.name || '?').split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
-  const footerProps = { session, isAdmin, initials, theme, setTheme, signOut, threatLevel }
-  const navContent = isAdmin
-    ? <AdminNav awaiting={awaiting} />
-    : <NavSection label={sectionLabel} nav={nav} awaiting={awaiting} />
 
   return (
-    <div className="flex min-h-screen">
-      {/* Fixed left sidebar (desktop) */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-[#050b18] lg:flex">
-        <div className="px-4 pb-2 pt-5">
-          <Brand home={isAdmin ? '/admin' : '/'} />
-        </div>
-        <div className="flex-1 overflow-y-auto px-4 py-4">
-          {navContent}
-        </div>
-        <SidebarFooter {...footerProps} />
-      </aside>
-
-      {/* Main column */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* Mobile top bar */}
-        <header className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-[#050b18] px-4 py-3 lg:hidden">
-          <Brand home={isAdmin ? '/admin' : '/'} />
-          <button
-            type="button"
-            className="btn btn-ghost !px-3"
-            onClick={() => setMobileOpen((o) => !o)}
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileOpen}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </header>
-
-        {/* Mobile nav panel */}
-        {mobileOpen && (
-          <div className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-[#050b18] px-4 py-4 lg:hidden">
-            {isAdmin ? <AdminNav awaiting={awaiting} onNavigate={() => setMobileOpen(false)} /> : <NavSection label={sectionLabel} nav={nav} awaiting={awaiting} onNavigate={() => setMobileOpen(false)} />}
-            <div className="mt-4">
-              <SidebarFooter {...footerProps} />
-            </div>
-          </div>
-        )}
-
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-8">
+    <div className="min-h-screen">
+      <Sidebar open={open} onClose={() => setOpen(false)} isAdmin={isAdmin} awaiting={awaiting} threatLevel={threatLevel} session={session} initials={initials}>
+        <SidebarAccount session={session} isAdmin={isAdmin} initials={initials} />
+      </Sidebar>
+      <div className="min-w-0 overflow-x-clip lg:pl-64">
+        <TopBar onMenu={() => setOpen(true)} threatLevel={threatLevel} theme={theme} setTheme={setTheme} signOut={signOut} />
+        <main key={loc.pathname} className="mx-auto max-w-[1440px] px-4 py-6 md:px-8 md:py-8">
           <Outlet />
         </main>
-
-        <footer className="border-t border-slate-200 dark:border-slate-700 py-4 text-center text-xs text-slate-500 dark:text-slate-400">
+        <footer className="border-t border-slate-200 dark:border-white/[0.06] py-4 text-center text-xs text-slate-500 dark:text-slate-500">
           Demo — synthetic data only. No real money, email, or data. All checks run in your browser.
         </footer>
       </div>

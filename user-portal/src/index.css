@@ -9,6 +9,7 @@
 
 html, body, #root { min-height: 100%; }
 
+/* Light theme (dark is the default; the toggle flips the .dark class on <html>). */
 body {
   background: #f6f8fb;
   background-image: radial-gradient(1000px 480px at 80% -10%, rgba(37, 99, 235, 0.08), transparent 60%),
@@ -18,20 +19,43 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: rgba(59, 130, 246, 0.25); }
-* { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
-:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 6px; }
-
-.card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -16px rgba(15, 23, 42, 0.18);
+/* Dark theme — the old repo's body, exactly as it is. */
+.dark body {
+  background: #070b14;
+  background-image: radial-gradient(1200px 600px at 75% -10%, rgba(37, 99, 235, 0.13), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(56, 189, 248, 0.06), transparent 60%);
+  background-attachment: fixed;
+  color: #e2e8f0;
 }
 
-.card-hover { transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
-.card-hover:hover { border-color: #bfdbfe; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 12px 28px -14px rgba(37, 99, 235, 0.35); transform: translateY(-1px); }
+::selection { background: rgba(59, 130, 246, 0.35); }
+* { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+.dark * { scrollbar-color: #1e293b transparent; }
+:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; border-radius: 6px; }
 
+/* Glass panel — light base; the old repo's glass in dark mode. */
+.glass {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -16px rgba(15, 23, 42, 0.18);
+}
+.dark .glass {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.72), rgba(11, 17, 31, 0.72));
+  border: 1px solid rgba(148, 163, 184, 0.10);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.hl { background: rgba(239, 68, 68, 0.18); color: #fecaca; border-bottom: 1px solid rgba(248, 113, 113, 0.7); border-radius: 2px; }
+.pulse-dot { animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+@keyframes flow { to { stroke-dashoffset: -20; } }
+.flow { stroke-dasharray: 4 6; animation: flow 1.2s linear infinite; }
+.flow-line { background: linear-gradient(90deg, rgba(59,130,246,.2), rgba(59,130,246,.9), rgba(59,130,246,.2)); background-size: 200% 100%; animation: flowx 1.6s linear infinite; }
+@keyframes flowx { to { background-position: -200% 0; } }
+.bg-grid { background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,130,246,.18), transparent), linear-gradient(rgba(148,163,184,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.04) 1px, transparent 1px); background-size: auto, 44px 44px, 44px 44px; }
+
+/* Form fields — light base; the old repo's dark field in dark mode. */
 .input {
   width: 100%;
   border: 1px solid #cbd5e1;
@@ -43,61 +67,14 @@ body {
 }
 .input::placeholder { color: #94a3b8; }
 .input:focus { outline: 2px solid #2563eb; outline-offset: 0; border-color: #2563eb; }
-
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 14px; border-radius: 10px; padding: 9px 16px; cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease; border: 1px solid transparent; }
-.btn:disabled { opacity: 0.55; cursor: not-allowed; }
-.btn-primary { background: #2563eb; color: #fff; }
-.btn-primary:hover:not(:disabled) { background: #1d4ed8; }
-.btn-danger { background: #dc2626; color: #fff; }
-.btn-danger:hover:not(:disabled) { background: #b91c1c; }
-.btn-success { background: #16a34a; color: #fff; }
-.btn-success:hover:not(:disabled) { background: #15803d; }
-.btn-outline { background: #fff; border-color: #cbd5e1; color: #0f172a; }
-.btn-outline:hover:not(:disabled) { border-color: #94a3b8; background: #f8fafc; }
-.btn-ghost { background: transparent; color: #334155; }
-.btn-ghost:hover:not(:disabled) { background: #f1f5f9; }
-
-.navlink { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 500; color: #475569; }
-.navlink:hover { background: #f1f5f9; color: #0f172a; }
-.navlink.active { background: #dbeafe; color: #1d4ed8; }
-
-/* Dark mode — the portal as it is, in dark. The `dark` class lives on <html>. */
-/* Navy palette matching the old site: page #050B18, cards #0B1526, borders #1E293B. */
-.dark {
-  --color-slate-800: #0f1b2e;
-  --color-slate-700: #1e293b;
+.dark .input {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
 }
-.dark body {
-  background: #050b18;
-  background-image: radial-gradient(1000px 480px at 80% -10%, rgba(37, 99, 235, 0.14), transparent 60%),
-    radial-gradient(800px 420px at -10% 110%, rgba(34, 211, 238, 0.08), transparent 60%);
-  color: #e2e8f0;
-}
-.dark ::selection { background: rgba(59, 130, 246, 0.4); }
-.dark * { scrollbar-color: #1e293b transparent; }
-.dark .card { background: #0b1526; border-color: #1e293b; box-shadow: none; }
-.dark .card-hover:hover { border-color: #2563eb; box-shadow: none; }
-.dark .input { background: #0f172a; border-color: #1e293b; color: #e2e8f0; }
 .dark .input::placeholder { color: #64748b; }
-.dark .btn-outline { background: #0f172a; border-color: #1e293b; color: #e2e8f0; }
-.dark .btn-outline:hover:not(:disabled) { border-color: #334155; background: #0f1b2e; }
-.dark .btn-ghost { color: #cbd5e1; }
-.dark .btn-ghost:hover:not(:disabled) { background: #1e293b; }
-.dark .navlink { color: #94a3b8; }
-.dark .navlink:hover { background: #1e293b; color: #f1f5f9; }
-.dark .navlink.active { background: #16233a; color: #f8fafc; }
-.dark .navlink.active svg { color: #60a5fa; }
-
-/* Blue-to-cyan gradient text, used sparingly (hero headlines). */
-.gradient-text {
-  background: linear-gradient(90deg, #60a5fa, #22d3ee);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+.dark .input:focus { outline: none; border-color: #3b82f6; }
+.dark select.input option { background: #0f172a; color: #e2e8f0; }
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .fade-up { animation: fadeUp 0.35s ease both; }
-
-@keyframes pulseDot { 50% { opacity: 0.35; } }
-.pulse-dot { animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }

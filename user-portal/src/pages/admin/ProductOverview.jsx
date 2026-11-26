@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ShieldCheck, Search, ListChecks, ArrowRight } from 'lucide-react'
-import { Card, LivePill } from '../../components/ui.jsx'
+import { Card, CardHeader, PageHeader } from '../../components/ui.jsx'
 
 const FEATURES = [
   {
@@ -31,17 +31,15 @@ const PIPELINE = [
 export default function ProductOverview() {
   return (
     <div className="fade-up space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Product Overview</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">What AgentShield is, and how it guards the assistant.</p>
-        </div>
-        <LivePill />
-      </div>
+      <PageHeader
+        eyebrow="Product Overview"
+        title="Product Overview"
+        subtitle="What AgentShield is, and how it guards the assistant."
+      />
 
-      <section className="card p-6 sm:p-8">
-        <h2 className="max-w-2xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
-          Your AI assistant, <span className="gradient-text">guarded.</span>
+      <Card className="p-6 sm:p-8">
+        <h2 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+          Your AI assistant, guarded.
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-400 sm:text-base">
           AgentShield checks every request before your assistant acts. If a hidden instruction
@@ -53,11 +51,11 @@ export default function ProductOverview() {
           tools are not registered at all, so a transfer can never be ordered — even by an
           instruction that slips into the prompt.
         </p>
-      </section>
+      </Card>
 
       <div className="grid gap-3 sm:grid-cols-3">
         {FEATURES.map((f) => (
-          <Card key={f.title}>
+          <Card key={f.title} className="p-5">
             <f.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             <div className="mt-2 text-sm font-bold text-slate-900 dark:text-slate-100">{f.title}</div>
             <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{f.body}</p>
@@ -66,11 +64,11 @@ export default function ProductOverview() {
       </div>
 
       <Card>
-        <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">How a request is checked</h2>
-        <ol className="mt-3 space-y-3">
+        <CardHeader title="How a request is checked" />
+        <ol className="space-y-3 p-5">
           {PIPELINE.map((p, i) => (
             <li key={p.step} className="flex items-start gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
               <span>
                 <span className="block text-sm font-bold text-slate-900 dark:text-slate-100">{p.step}</span>
                 <span className="block text-sm text-slate-600 dark:text-slate-400">{p.body}</span>
@@ -81,12 +79,18 @@ export default function ProductOverview() {
       </Card>
 
       <Card>
-        <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Where to go next</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Link to="/admin" className="btn btn-outline">Dashboard <ArrowRight className="h-4 w-4" /></Link>
-          <Link to="/admin/simulator" className="btn btn-outline">Attack Simulator <ArrowRight className="h-4 w-4" /></Link>
-          <Link to="/admin/queue" className="btn btn-outline">Approval Queue <ArrowRight className="h-4 w-4" /></Link>
-          <Link to="/admin/architecture" className="btn btn-outline">Architecture <ArrowRight className="h-4 w-4" /></Link>
+        <CardHeader title="Where to go next" />
+        <div className="flex flex-wrap gap-2 p-5">
+          {[
+            ['/admin', 'Dashboard'],
+            ['/admin/simulator', 'Attack Simulator'],
+            ['/admin/queue', 'Approval Queue'],
+            ['/admin/architecture', 'Architecture'],
+          ].map(([to, label]) => (
+            <Link key={to} to={to} className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-3.5 py-2 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 dark:bg-white/[0.04] dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/[0.08]">
+              {label} <ArrowRight className="h-4 w-4" />
+            </Link>
+          ))}
         </div>
       </Card>
     </div>

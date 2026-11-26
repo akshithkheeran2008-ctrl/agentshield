@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FlaskConical, ShieldCheck, RotateCcw, ListChecks } from 'lucide-react'
 import { useStore } from '../../store.jsx'
 import { SAMPLE_TASKS } from '../../lib/requests.js'
-import { LivePill } from '../../components/ui.jsx'
+import { Button, Card, CardHeader, PageHeader } from '../../components/ui.jsx'
 import VerdictCard from '../../components/VerdictCard.jsx'
 
 const SOURCE_OPTIONS = [
@@ -62,70 +62,61 @@ export default function Simulator() {
 
   return (
     <div className="fade-up space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Attack Simulator</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">Run a prompt through the same check a real request gets — and see exactly what happens.</p>
-        </div>
-        <LivePill />
-      </div>
+      <PageHeader
+        eyebrow="Security Console"
+        title="Attack Simulator"
+        subtitle="Run a prompt through the same check a real request gets — and see exactly what happens."
+      />
 
-      <section className="card p-6">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Test a prompt</h2>
-        <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-          Paste any prompt — long, short, from any dataset or document. Line breaks are fine.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {PRESETS.map((p) => (
-            <button key={p.id} type="button" className="btn btn-outline !px-3 !py-1.5 text-xs" onClick={() => loadPreset(p.id)} title={p.hint}>
-              {p.label}
-            </button>
-          ))}
+      <Card>
+        <CardHeader icon={FlaskConical} title="Test a prompt" subtitle="Paste any prompt — long, short, from any dataset or document. Line breaks are fine." />
+        <div className="p-5">
+          <div className="flex flex-wrap gap-2">
+            {PRESETS.map((p) => (
+              <Button key={p.id} size="sm" onClick={() => loadPreset(p.id)} title={p.hint}>
+                {p.label}
+              </Button>
+            ))}
+          </div>
+          <form onSubmit={runScan} className="mt-4 space-y-3">
+            <div>
+              <label htmlFor="sim-text" className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Paste the prompt</label>
+              <textarea
+                id="sim-text"
+                className="input min-h-36"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Paste the prompt here — for example a message from a dataset, a document, or an email."
+              />
+            </div>
+            <div>
+              <label htmlFor="sim-source" className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Where did it come from?</label>
+              <select id="sim-source" className="input" value={source} onChange={(e) => setSource(e.target.value)}>
+                {SOURCE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+            </div>
+            {error && <p className="text-sm font-medium text-red-600 dark:text-red-400">{error}</p>}
+            <Button type="submit" variant="primary" icon={ShieldCheck}>Run scan</Button>
+          </form>
+          <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+            Every test is saved as a request, and anything risky goes to the{' '}
+            <Link to="/admin/queue" className="font-semibold text-blue-600 dark:text-blue-400 underline">Approval Queue</Link>{' '}
+            — exactly like a real request.
+          </p>
         </div>
-        <form onSubmit={runScan} className="mt-4 space-y-3">
-          <div>
-            <label htmlFor="sim-text" className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-300">Paste the prompt</label>
-            <textarea
-              id="sim-text"
-              className="input min-h-36"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Paste the prompt here — for example a message from a dataset, a document, or an email."
-            />
-          </div>
-          <div>
-            <label htmlFor="sim-source" className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-300">Where did it come from?</label>
-            <select id="sim-source" className="input" value={source} onChange={(e) => setSource(e.target.value)}>
-              {SOURCE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
-          </div>
-          {error && <p className="text-sm font-medium text-red-600 dark:text-red-400">{error}</p>}
-          <button type="submit" className="btn btn-primary">
-            <ShieldCheck className="h-4 w-4" /> Run scan
-          </button>
-        </form>
-        <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-          Every test is saved as a request, and anything risky goes to the{' '}
-          <Link to="/admin/queue" className="font-semibold text-blue-700 dark:text-blue-400 underline">Approval Queue</Link>{' '}
-          — exactly like a real request.
-        </p>
-      </section>
+      </Card>
 
       {result && (
         <div id="simulator-result" className="scroll-mt-4 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Result — {result.id}</h2>
             <span className="flex gap-2">
-              <Link to={`/admin/requests/${result.id}`} className="btn btn-ghost !px-3">
-                <ListChecks className="h-4 w-4" /> Full detail
+              <Link to={`/admin/requests/${result.id}`}>
+                <Button variant="ghost" size="sm" icon={ListChecks}>Full detail</Button>
               </Link>
-              <button
-                type="button"
-                className="btn btn-ghost !px-3"
-                onClick={() => { setResultId(null); setText('') }}
-              >
-                <RotateCcw className="h-4 w-4" /> Test another
-              </button>
+              <Button variant="ghost" size="sm" icon={RotateCcw} onClick={() => { setResultId(null); setText('') }}>
+                Test another
+              </Button>
             </span>
           </div>
           <VerdictCard request={result} showAdminActions onDecide={decide} />

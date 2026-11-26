@@ -1,5 +1,5 @@
 import { ArrowRight, ShieldCheck } from 'lucide-react'
-import { Card, LivePill } from '../../components/ui.jsx'
+import { Card, CardHeader, PageHeader, cx } from '../../components/ui.jsx'
 
 const FLOW = [
   { name: 'Client Applications', desc: 'Where the request starts', tone: 'blue' },
@@ -10,11 +10,11 @@ const FLOW = [
 ]
 
 const FLOW_TONE = {
-  blue: 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300',
-  violet: 'border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-900/20 text-violet-800 dark:text-violet-300',
-  green: 'border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300',
-  cyan: 'border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-900/20 text-cyan-800 dark:text-cyan-300',
-  amber: 'border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300',
+  blue: 'border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300',
+  violet: 'border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300',
+  green: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+  cyan: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300',
+  amber: 'border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300',
 }
 
 const COMPONENTS = [
@@ -35,20 +35,18 @@ const DATA_FLOW = [
 export default function Architecture() {
   return (
     <div className="fade-up space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Architecture</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">How a request moves through AgentShield — and what guards it at each step.</p>
-        </div>
-        <LivePill />
-      </div>
+      <PageHeader
+        eyebrow="Information"
+        title="Architecture"
+        subtitle="How a request moves through AgentShield — and what guards it at each step."
+      />
 
       <Card>
-        <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">The layers</h2>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
+        <CardHeader title="The layers" />
+        <div className="flex flex-wrap items-center gap-2 p-5">
           {FLOW.map((f, i) => (
             <span key={f.name} className="flex flex-wrap items-center gap-2">
-              <span className={`rounded-xl border px-3 py-2.5 ${FLOW_TONE[f.tone]}`}>
+              <span className={cx('rounded-lg border px-3 py-2.5', FLOW_TONE[f.tone])}>
                 <span className="flex items-center gap-2 text-sm font-bold">
                   {f.highlight && <ShieldCheck className="h-4 w-4 shrink-0" />}
                   {f.name}
@@ -63,7 +61,7 @@ export default function Architecture() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         {COMPONENTS.map((c) => (
-          <Card key={c.name}>
+          <Card key={c.name} className="p-5">
             <div className="text-base font-bold text-slate-900 dark:text-slate-100">{c.name}</div>
             <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{c.body}</p>
           </Card>
@@ -71,11 +69,11 @@ export default function Architecture() {
       </div>
 
       <Card>
-        <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Data flow</h2>
-        <ol className="mt-3 space-y-3">
+        <CardHeader title="Data flow" />
+        <ol className="space-y-3 p-5">
           {DATA_FLOW.map((d, i) => (
             <li key={d.step} className="flex items-start gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
               <span>
                 <span className="block text-sm font-bold text-slate-900 dark:text-slate-100">{d.step}</span>
                 <span className="block text-sm text-slate-600 dark:text-slate-400">{d.body}</span>

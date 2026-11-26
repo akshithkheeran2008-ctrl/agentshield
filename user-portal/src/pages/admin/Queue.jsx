@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { useStore } from '../../store.jsx'
 import { awaitingRequests, attackTypePlain } from '../../lib/requests.js'
-import { Badge, EmptyState, LivePill, timeAgo } from '../../components/ui.jsx'
+import { Badge, Button, PageHeader, EmptyState, timeAgo } from '../../components/ui.jsx'
 import VerdictCard from '../../components/VerdictCard.jsx'
 
 export default function Queue() {
@@ -11,17 +11,11 @@ export default function Queue() {
 
   return (
     <div className="fade-up space-y-4">
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Approval Queue</h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-            Every request that scored 30 or higher, or had an action held for review. Approve runs the
-            held actions in the sandbox; deny blocks them. Actions the policies already blocked stay
-            blocked either way. Your decision shows up in the user’s panel straight away.
-          </p>
-        </div>
-        <LivePill />
-      </div>
+      <PageHeader
+        eyebrow="Security Console"
+        title="Approval Queue"
+        subtitle="Every request that scored 30 or higher, or had an action held for review. Approve runs the held actions in the sandbox; deny blocks them. Actions the policies already blocked stay blocked either way. Your decision shows up in the user’s panel straight away."
+      />
 
       {queue.length === 0 ? (
         <EmptyState
@@ -39,19 +33,13 @@ export default function Queue() {
                     {r.id} · {r.userEmail} · {timeAgo(r.ts)} · {attackTypePlain(r.scan.attackType)}
                   </p>
                 </div>
-                <Badge tone={r.scan.level === 'LOW' ? 'review' : 'blocked'}>
-                  {r.scan.level} · {r.scan.score}/100
-                </Badge>
+                <Badge value={r.scan.level}>{r.scan.level} · {r.scan.score}/100</Badge>
               </div>
               <VerdictCard request={r} showAdminActions onDecide={(id, d) => decide(id, d)} />
               <div className="flex flex-wrap gap-2">
-                <button type="button" className="btn btn-success" onClick={() => decide(r.id, 'approve')}>
-                  <CheckCircle2 className="h-4 w-4" /> Approve
-                </button>
-                <button type="button" className="btn btn-danger" onClick={() => decide(r.id, 'deny')}>
-                  <XCircle className="h-4 w-4" /> Deny
-                </button>
-                <Link to={`/admin/requests/${r.id}`} className="btn btn-outline">Open full detail</Link>
+                <Button variant="success" icon={CheckCircle2} onClick={() => decide(r.id, 'approve')}>Approve</Button>
+                <Button variant="danger" icon={XCircle} onClick={() => decide(r.id, 'deny')}>Deny</Button>
+                <Link to={`/admin/requests/${r.id}`}><Button>Open full detail</Button></Link>
               </div>
             </article>
           ))}
