@@ -2,9 +2,9 @@
 
 A hidden instruction is hard to see. AgentShield tells you what an AI agent was asked to do, whether that instruction should be trusted, and whether the tool call was stopped before it ran.
 
-**Try it live:** [agentshield-bch8.netlify.app](https://agentshield-bch8.netlify.app/)
+**Try it live:** [agentshield-05.vercel.app/dashboard](https://agentshield-05.vercel.app/dashboard)
 
-**Code:** [github.com/Hrishisthawarmath/agentshield](https://github.com/Hrishisthawarmath/agentshield)
+**Code:** [github.com/akshithkheeran2008-ctrl/agentshield](https://github.com/akshithkheeran2008-ctrl/agentshield)
 
 | Field | Value |
 | --- | --- |
@@ -186,7 +186,7 @@ Health of the project, honestly: this README does not quote a test count, a cove
 
 Netlify: import the repo and leave the Base directory empty. `netlify.toml` sets the build command to `npm run build`, publishes `dist`, uses Node 20 and adds the SPA fallback. Optionally set `VITE_API_URL` to a hosted FastAPI instance.
 
-Live deployment supplied by the team: [agentshield-bch8.netlify.app](https://agentshield-bch8.netlify.app/)
+Live deployment: [agentshield-05.vercel.app/dashboard](https://agentshield-05.vercel.app/dashboard)
 
 ## Licence
 
