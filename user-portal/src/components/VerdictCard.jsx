@@ -40,28 +40,28 @@ export default function VerdictCard({ request, showAdminActions = false, onDecid
         <CardHeader icon={Icon} title={v.headline} subtitle={v.blurb} right={<Badge value={STATUS_BADGE[request.status] || 'NONE'}>{st.label}</Badge>} />
         <div className="p-5">
           <ScoreBar score={scan.score} level={scan.level} />
-          <div className="mt-4 grid gap-2 text-sm text-slate-600 dark:text-slate-400 sm:grid-cols-2">
-            <div><span className="font-semibold text-slate-800 dark:text-slate-200">Attack: </span>{attackTypePlain(scan.attackType)}</div>
-            <div><span className="font-semibold text-slate-800 dark:text-slate-200">Checked: </span>{fmtTime(request.ts)} ({timeAgo(request.ts)})</div>
-            <div><span className="font-semibold text-slate-800 dark:text-slate-200">Came from: </span>{sourceLabel(request.source)}{request.resource ? ` · ${request.resource}` : ''}</div>
-            <div className="sm:col-span-2"><span className="font-semibold text-slate-800 dark:text-slate-200">Your request: </span>{request.goal}</div>
+          <div className="mt-4 grid gap-2 text-sm text-ink/65 dark:text-mist/65 sm:grid-cols-2">
+            <div><span className="font-semibold text-ink dark:text-white">Attack: </span>{attackTypePlain(scan.attackType)}</div>
+            <div><span className="font-semibold text-ink dark:text-white">Checked: </span>{fmtTime(request.ts)} ({timeAgo(request.ts)})</div>
+            <div><span className="font-semibold text-ink dark:text-white">Came from: </span>{sourceLabel(request.source)}{request.resource ? ` · ${request.resource}` : ''}</div>
+            <div className="sm:col-span-2"><span className="font-semibold text-ink dark:text-white">Your request: </span>{request.goal}</div>
           </div>
 
           {request.status === 'awaiting' && (
-            <div className="mt-4 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-800 dark:text-amber-200">
+            <div className="mt-4 flex items-start gap-2 rounded-xl border border-flame/30 bg-flame/10 p-3 text-sm text-flame-deep dark:text-flame-soft">
               <Clock className="mt-0.5 h-4 w-4 shrink-0" />
               <span><strong>Waiting for admin decision.</strong> An admin will review this request. Nothing risky has run, and the assistant is on hold until then.</span>
             </div>
           )}
           {request.decisionBy && (
-            <div className="mt-4 flex items-start gap-2 rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] p-3 text-sm text-slate-700 dark:text-slate-300">
-              {request.status === 'approved' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" /> : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />}
+            <div className="mt-4 flex items-start gap-2 rounded-xl border border-ink/10 dark:border-mist/10 bg-ink/[0.03] dark:bg-white/[0.02] p-3 text-sm text-ink/70 dark:text-mist/70">
+              {request.status === 'approved' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-kelly-deep dark:text-kelly-soft" /> : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-crimson-deep dark:text-crimson-soft" />}
               <span><strong>Decided by {request.decisionBy}</strong> · {fmtTime(request.decisionTs)}. {request.decisionNote}</span>
             </div>
           )}
 
           {showAdminActions && request.status === 'awaiting' && onDecide && (
-            <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-200 dark:border-white/[0.06] pt-4">
+            <div className="mt-4 flex flex-wrap gap-2 border-t border-ink/10 dark:border-mist/10 pt-4">
               <Button variant="success" icon={CheckCircle2} onClick={() => onDecide(request.id, 'approve')}>
                 Approve — run the safe actions
               </Button>
@@ -73,31 +73,31 @@ export default function VerdictCard({ request, showAdminActions = false, onDecid
         </div>
       </Card>
 
-      {/* Why this score */}
+      {/* Why this score — one card per detection reason */}
       <Card>
         <CardHeader title="Why this score" subtitle="Every point is explained — nothing is just a colour." />
         <div className="p-5">
           {scan.signals.length === 0 ? (
-            <p className="text-sm text-slate-600 dark:text-slate-400">No warning signs were found in the words. The pattern checker also gave this a clean result.</p>
+            <p className="text-sm text-ink/65 dark:text-mist/65">No warning signs were found in the words. The pattern checker also gave this a clean result.</p>
           ) : (
-            <ul className="space-y-2">
+            <ul className="grid gap-2 sm:grid-cols-2">
               {scan.signals.map((s) => (
-                <li key={s.id} className="flex items-start justify-between gap-3 rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] px-3 py-2.5">
-                  <div>
-                    <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{s.label}</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">{s.explain}</div>
-                    {s.matches && s.matches.length > 0 && (
-                      <div className="mt-1 font-mono text-xs text-slate-500 dark:text-slate-400">Matched: {s.matches.slice(0, 3).join(' · ')}</div>
-                    )}
+                <li key={s.id} className="rounded-xl border border-flame/25 bg-flame/[0.06] p-3.5 dark:border-flame/25 dark:bg-flame/[0.07]">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="text-sm font-bold text-ink dark:text-white">{s.label}</div>
+                    <span className="shrink-0 rounded-full bg-flame/15 px-2 py-0.5 text-xs font-bold text-flame-deep dark:text-flame-soft ring-1 ring-inset ring-flame/30">+{s.weight} pts</span>
                   </div>
-                  <span className="shrink-0 rounded-full bg-white dark:bg-white/[0.04] px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10">+{s.weight} pts</span>
+                  <div className="mt-1 text-sm leading-relaxed text-ink/65 dark:text-mist/65">{s.explain}</div>
+                  {s.matches && s.matches.length > 0 && (
+                    <div className="mt-2 font-mono text-xs text-ink/50 dark:text-mist/50">Matched: {s.matches.slice(0, 3).join(' · ')}</div>
+                  )}
                 </li>
               ))}
             </ul>
           )}
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-3 text-sm text-ink/65 dark:text-mist/65">
             The pattern checker (a small trained classifier) added{' '}
-            <strong className="text-slate-800 dark:text-slate-200">{scan.classifier.points} points</strong>{' '}
+            <strong className="text-ink dark:text-white">{scan.classifier.points} points</strong>{' '}
             with a confidence of {Math.round(scan.classifier.prob * 100)}%.
             {scan.decoded && scan.decoded.length > 0 && (
               <> Hidden encoded text was decoded and checked too: {scan.decoded.map((d) => `"${d}"`).join(', ')}.</>
@@ -115,22 +115,22 @@ export default function VerdictCard({ request, showAdminActions = false, onDecid
             {agent.calls.map((c) => {
               const cs = callStatusText(c)
               return (
-                <li key={c.id} className="rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] px-3 py-2.5">
+                <li key={c.id} className="rounded-xl border border-ink/10 dark:border-mist/10 bg-ink/[0.03] dark:bg-white/[0.02] px-3 py-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">{c.label}</span>
+                    <span className="text-sm font-semibold text-ink dark:text-white">{c.label}</span>
                     <Badge value={CALL_BADGE[cs.tone] || 'NONE'}>{cs.label}</Badge>
                   </div>
-                  <div className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  <div className="mt-1 text-sm text-ink/65 dark:text-mist/65">
                     {c.tainted ? 'This action came from the untrusted content, not from you. ' : ''}
                     {c.reason}
                   </div>
                   {c.result && c.tool === 'payment_lookup' && c.result.balance && (
-                    <div className="mt-1.5 rounded-lg bg-white dark:bg-black/30 px-2.5 py-2 font-mono text-xs text-slate-600 dark:text-slate-400 ring-1 ring-slate-200 dark:ring-white/10">
+                    <div className="mt-1.5 rounded-lg bg-white dark:bg-black/30 px-2.5 py-2 font-mono text-xs text-ink/65 dark:text-mist/65 ring-1 ring-ink/10 dark:ring-mist/10">
                       {c.result.name} · Balance {c.result.balance}
                     </div>
                   )}
                   {c.result && c.result.draft_id && (
-                    <div className="mt-1.5 rounded-lg bg-white dark:bg-black/30 px-2.5 py-2 font-mono text-xs text-slate-600 dark:text-slate-400 ring-1 ring-slate-200 dark:ring-white/10">
+                    <div className="mt-1.5 rounded-lg bg-white dark:bg-black/30 px-2.5 py-2 font-mono text-xs text-ink/65 dark:text-mist/65 ring-1 ring-ink/10 dark:ring-mist/10">
                       Draft {c.result.draft_id} · {c.result.status} · To {c.result.to}
                     </div>
                   )}
@@ -138,8 +138,8 @@ export default function VerdictCard({ request, showAdminActions = false, onDecid
               )
             })}
           </ul>
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            Assistant status: <strong className="text-slate-800 dark:text-slate-200">{agent.status}</strong> — {agent.summary}
+          <p className="mt-3 text-sm text-ink/65 dark:text-mist/65">
+            Assistant status: <strong className="text-ink dark:text-white">{agent.status}</strong> — {agent.summary}
           </p>
         </div>
       </Card>

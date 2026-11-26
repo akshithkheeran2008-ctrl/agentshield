@@ -10,11 +10,11 @@ const FLOW = [
 ]
 
 const FLOW_TONE = {
-  blue: 'border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300',
-  violet: 'border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300',
-  green: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
-  cyan: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300',
-  amber: 'border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300',
+  blue: 'border-aqua/30 bg-aqua/10 text-aqua-deep dark:text-aqua-soft',
+  violet: 'border-royal/30 bg-royal/10 text-royal-deep dark:text-royal-soft',
+  green: 'border-kelly/40 bg-kelly/10 text-kelly-deep dark:text-kelly-soft',
+  cyan: 'border-aqua/30 bg-aqua/10 text-aqua-deep dark:text-aqua-soft',
+  amber: 'border-flame/30 bg-flame/10 text-flame-deep dark:text-flame-soft',
 }
 
 const COMPONENTS = [
@@ -53,7 +53,7 @@ export default function Architecture() {
                 </span>
                 <span className="block text-xs font-normal opacity-80">{f.desc}</span>
               </span>
-              {i < FLOW.length - 1 && <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />}
+              {i < FLOW.length - 1 && <ArrowRight className="h-4 w-4 shrink-0 text-ink/50 dark:text-mist/55" />}
             </span>
           ))}
         </div>
@@ -62,8 +62,8 @@ export default function Architecture() {
       <div className="grid gap-3 sm:grid-cols-2">
         {COMPONENTS.map((c) => (
           <Card key={c.name} className="p-5">
-            <div className="text-base font-bold text-slate-900 dark:text-slate-100">{c.name}</div>
-            <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{c.body}</p>
+            <div className="text-base font-bold text-ink dark:text-white">{c.name}</div>
+            <p className="mt-1 text-sm leading-relaxed text-ink/70 dark:text-mist/60">{c.body}</p>
           </Card>
         ))}
       </div>
@@ -73,10 +73,10 @@ export default function Architecture() {
         <ol className="space-y-3 p-5">
           {DATA_FLOW.map((d, i) => (
             <li key={d.step} className="flex items-start gap-3">
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-royal text-xs font-bold text-white">{i + 1}</span>
               <span>
-                <span className="block text-sm font-bold text-slate-900 dark:text-slate-100">{d.step}</span>
-                <span className="block text-sm text-slate-600 dark:text-slate-400">{d.body}</span>
+                <span className="block text-sm font-bold text-ink dark:text-white">{d.step}</span>
+                <span className="block text-sm text-ink/70 dark:text-mist/60">{d.body}</span>
               </span>
             </li>
           ))}

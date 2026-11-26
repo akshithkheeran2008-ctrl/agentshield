@@ -135,8 +135,8 @@ export default function PromptLab() {
           </>
         }
       />
-      <p className="-mt-3 text-sm text-slate-500 dark:text-slate-400">
-        Every test is saved to <Link to="/requests" className="font-semibold text-blue-600 dark:text-blue-400 underline">My Requests</Link>,
+      <p className="-mt-3 text-sm text-ink/60 dark:text-mist/60">
+        Every test is saved to <Link to="/requests" className="font-semibold text-flame dark:text-aqua-soft underline">My Requests</Link>,
         and anything risky goes to the admin — exactly like a real request.
       </p>
 
@@ -145,7 +145,7 @@ export default function PromptLab() {
           <CardHeader icon={FlaskConical} title="Test one prompt" subtitle="Paste any prompt — long, short, from any database or dataset. Line breaks are fine." />
           <form onSubmit={testSingle} className="space-y-3 p-5">
             <div>
-              <label htmlFor="lab-text" className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Paste the prompt</label>
+              <label htmlFor="lab-text" className="mb-1 block text-xs font-medium text-ink/60 dark:text-mist/60">Paste the prompt</label>
               <textarea
                 id="lab-text"
                 className="input min-h-36"
@@ -155,19 +155,19 @@ export default function PromptLab() {
               />
             </div>
             <div>
-              <label htmlFor="lab-source" className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Where did it come from?</label>
+              <label htmlFor="lab-source" className="mb-1 block text-xs font-medium text-ink/60 dark:text-mist/60">Where did it come from?</label>
               <select id="lab-source" className="input" value={singleSource} onChange={(e) => setSingleSource(e.target.value)}>
                 {SOURCE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
-            {singleError && <p className="text-sm font-medium text-red-600 dark:text-red-400">{singleError}</p>}
+            {singleError && <p className="text-sm font-medium text-crimson-deep dark:text-crimson-soft">{singleError}</p>}
             <Button type="submit" variant="primary" icon={ShieldCheck}>Test this prompt</Button>
           </form>
 
           {singleReq && (
-            <div id="single-result" className="scroll-mt-4 space-y-4 border-t border-slate-200 dark:border-white/[0.06] p-5">
+            <div id="single-result" className="scroll-mt-4 space-y-4 border-t border-ink/12 dark:border-mist/12 p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">Result — {singleReq.id}</h3>
+                <h3 className="text-base font-bold text-ink dark:text-white">Result — {singleReq.id}</h3>
                 <span className="flex gap-2">
                   <Link to={`/requests/${singleReq.id}`}>
                     <Button variant="ghost" size="sm" icon={ListChecks}>Full detail</Button>
@@ -190,16 +190,16 @@ export default function PromptLab() {
             <div className="p-5">
               <div className="grid gap-2 sm:grid-cols-2">
                 {HARD_SET.map((s) => (
-                  <label key={s.id} className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] px-3 py-2.5">
+                  <label key={s.id} className="flex cursor-pointer items-start gap-3 rounded-lg border border-ink/12 dark:border-mist/12 bg-white dark:bg-white/[0.02] px-3 py-2.5">
                     <input
                       type="checkbox"
-                      className="mt-1 h-4 w-4 accent-blue-600"
+                      className="mt-1 h-4 w-4 accent-flame"
                       checked={checked.has(s.id)}
                       onChange={() => toggleHard(s.id)}
                     />
                     <span>
-                      <span className="block text-sm font-bold text-slate-900 dark:text-slate-100">{s.name}</span>
-                      <span className="block text-sm text-slate-600 dark:text-slate-400">{s.plain}</span>
+                      <span className="block text-sm font-bold text-ink dark:text-white">{s.name}</span>
+                      <span className="block text-sm text-ink/70 dark:text-mist/60">{s.plain}</span>
                     </span>
                   </label>
                 ))}
@@ -214,7 +214,7 @@ export default function PromptLab() {
             <CardHeader title="Paste your own prompts" subtitle={`One prompt per line, up to ${BULK_CAP} at a time. Paste a whole list from a dataset and test it in one go. For a long prompt with line breaks, use the single test instead.`} />
             <form onSubmit={testBulkPaste} className="space-y-3 p-5">
               <div>
-                <label htmlFor="bulk-text" className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Prompts — one per line</label>
+                <label htmlFor="bulk-text" className="mb-1 block text-xs font-medium text-ink/60 dark:text-mist/60">Prompts — one per line</label>
                 <textarea
                   id="bulk-text"
                   className="input min-h-36"
@@ -224,12 +224,12 @@ export default function PromptLab() {
                 />
               </div>
               <div>
-                <label htmlFor="bulk-source" className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Where did they come from?</label>
+                <label htmlFor="bulk-source" className="mb-1 block text-xs font-medium text-ink/60 dark:text-mist/60">Where did they come from?</label>
                 <select id="bulk-source" className="input" value={bulkSource} onChange={(e) => setBulkSource(e.target.value)}>
                   {SOURCE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
-              {bulkError && <p className="text-sm font-medium text-red-600 dark:text-red-400">{bulkError}</p>}
+              {bulkError && <p className="text-sm font-medium text-crimson-deep dark:text-crimson-soft">{bulkError}</p>}
               <Button type="submit" variant="primary" icon={Play}>Test these prompts</Button>
             </form>
           </Card>
@@ -245,19 +245,19 @@ export default function PromptLab() {
                     <Card key={r.id} className="transition hover:-translate-y-0.5">
                       <Link to={`/requests/${r.id}`} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
                         <span className="min-w-0">
-                          <span className="block truncate text-sm font-bold text-slate-900 dark:text-slate-100">{snippet(r)}</span>
-                          <span className="block text-xs text-slate-500 dark:text-slate-400">{r.id} · Risk {r.scan.score}/100 · {st.label}</span>
+                          <span className="block truncate text-sm font-bold text-ink dark:text-white">{snippet(r)}</span>
+                          <span className="block text-xs text-ink/60 dark:text-mist/60">{r.id} · Risk {r.scan.score}/100 · {st.label}</span>
                         </span>
                         <span className="flex items-center gap-2">
                           <Badge value={r.scan.level}>{v.label}</Badge>
-                          <ArrowRight className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                          <ArrowRight className="h-4 w-4 text-ink/50 dark:text-mist/55" />
                         </span>
                       </Link>
                     </Card>
                   )
                 })}
               </div>
-              <p className="px-5 pb-5 text-xs text-slate-500 dark:text-slate-400">
+              <p className="px-5 pb-5 text-xs text-ink/60 dark:text-mist/60">
                 Tap any row for the full breakdown — every point explained, and what the assistant tried to do.
               </p>
             </Card>

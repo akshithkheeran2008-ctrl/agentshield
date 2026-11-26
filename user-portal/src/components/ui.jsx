@@ -3,57 +3,60 @@ import { verdictOf } from '../lib/requests.js'
 
 export const cx = (...c) => c.filter(Boolean).join(' ')
 
-// Copied from the old repo. The text colour carries a light-mode step so
-// badges stay readable when the Light theme is on; in dark (the default)
-// they render exactly as the old repo's.
+// Enterprise brand palette. Text uses a "deep" step in light mode and a
+// "soft" (lightened) step in dark mode so badges stay readable on both
+// backgrounds; the background tint and ring use the pure accent.
 export const TONE = {
-  SAFE: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  ALLOW: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  ALLOWED: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  EXECUTED: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  APPROVED: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  ONLINE: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  ACTIVE: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 ring-emerald-500/30',
-  LOW: 'text-yellow-700 dark:text-yellow-300 bg-yellow-500/10 ring-yellow-500/30',
-  REVIEW: 'text-amber-700 dark:text-amber-300 bg-amber-500/10 ring-amber-500/30',
-  PENDING: 'text-amber-700 dark:text-amber-300 bg-amber-500/10 ring-amber-500/30',
-  WARNING: 'text-amber-700 dark:text-amber-300 bg-amber-500/10 ring-amber-500/30',
-  MEDIUM: 'text-amber-700 dark:text-amber-300 bg-amber-500/10 ring-amber-500/30',
-  ELEVATED: 'text-amber-700 dark:text-amber-300 bg-amber-500/10 ring-amber-500/30',
-  HIGH: 'text-orange-700 dark:text-orange-300 bg-orange-500/10 ring-orange-500/30',
-  CRITICAL: 'text-red-700 dark:text-red-300 bg-red-500/12 ring-red-500/40',
-  BLOCK: 'text-red-700 dark:text-red-300 bg-red-500/12 ring-red-500/40',
-  BLOCKED: 'text-red-700 dark:text-red-300 bg-red-500/12 ring-red-500/40',
-  REJECTED: 'text-red-700 dark:text-red-300 bg-red-500/12 ring-red-500/40',
-  COMPROMISED: 'text-red-700 dark:text-red-200 bg-red-600/25 ring-red-500/60',
-  INFO: 'text-sky-700 dark:text-sky-300 bg-sky-500/10 ring-sky-500/30',
-  NONE: 'text-slate-600 dark:text-slate-300 bg-slate-500/10 ring-slate-500/30',
+  SAFE: 'text-kelly-deep dark:text-kelly-soft bg-kelly/10 ring-kelly/30',
+  ALLOW: 'text-kelly-deep dark:text-kelly-soft bg-kelly/10 ring-kelly/30',
+  ALLOWED: 'text-kelly-deep dark:text-kelly-soft bg-kelly/10 ring-kelly/30',
+  EXECUTED: 'text-kelly-deep dark:text-kelly-soft bg-kelly/10 ring-kelly/30',
+  APPROVED: 'text-kelly-deep dark:text-kelly-soft bg-kelly/10 ring-kelly/30',
+  ONLINE: 'text-sea-deep dark:text-sea-soft bg-sea/10 ring-sea/30',
+  ACTIVE: 'text-kelly-deep dark:text-kelly-soft bg-kelly/10 ring-kelly/30',
+  HEALTHY: 'text-sea-deep dark:text-sea-soft bg-sea/10 ring-sea/30',
+  LOW: 'text-flame-deep dark:text-flame-soft bg-flame/10 ring-flame/30',
+  REVIEW: 'text-flame-deep dark:text-flame-soft bg-flame/10 ring-flame/30',
+  PENDING: 'text-flame-deep dark:text-flame-soft bg-flame/10 ring-flame/30',
+  WARNING: 'text-flame-deep dark:text-flame-soft bg-flame/10 ring-flame/30',
+  MEDIUM: 'text-flame-deep dark:text-flame-soft bg-flame/10 ring-flame/30',
+  ELEVATED: 'text-flame-deep dark:text-flame-soft bg-flame/10 ring-flame/30',
+  HIGH: 'text-crimson-deep dark:text-crimson-soft bg-crimson/10 ring-crimson/40',
+  CRITICAL: 'text-crimson-deep dark:text-crimson-soft bg-crimson/12 ring-crimson/40',
+  BLOCK: 'text-crimson-deep dark:text-crimson-soft bg-crimson/12 ring-crimson/40',
+  BLOCKED: 'text-crimson-deep dark:text-crimson-soft bg-crimson/12 ring-crimson/40',
+  REJECTED: 'text-crimson-deep dark:text-crimson-soft bg-crimson/12 ring-crimson/40',
+  COMPROMISED: 'text-crimson-deep dark:text-crimson-soft bg-crimson/20 ring-crimson/50',
+  INFO: 'text-aqua-deep dark:text-aqua-soft bg-aqua/10 ring-aqua/30',
+  AI: 'text-royal-deep dark:text-royal-soft bg-royal/10 ring-royal/30',
+  ANALYSIS: 'text-royal-deep dark:text-royal-soft bg-royal/10 ring-royal/30',
+  NONE: 'text-ink/60 dark:text-mist/70 bg-ink/5 dark:bg-mist/10 ring-ink/15 dark:ring-mist/20',
 }
-export const TEXT = { SAFE: 'text-emerald-600 dark:text-emerald-400', LOW: 'text-yellow-600 dark:text-yellow-300', HIGH: 'text-orange-600 dark:text-orange-400', CRITICAL: 'text-red-600 dark:text-red-400', ALLOW: 'text-emerald-600 dark:text-emerald-400', REVIEW: 'text-amber-600 dark:text-amber-400', BLOCK: 'text-red-600 dark:text-red-400' }
-export const HEX = { SAFE: '#34d399', LOW: '#facc15', HIGH: '#fb923c', CRITICAL: '#f87171', ALLOW: '#34d399', REVIEW: '#fbbf24', BLOCK: '#f87171', INFO: '#38bdf8' }
+export const TEXT = { SAFE: 'text-kelly-deep dark:text-kelly-soft', LOW: 'text-flame-deep dark:text-flame-soft', HIGH: 'text-crimson-deep dark:text-crimson-soft', CRITICAL: 'text-crimson-deep dark:text-crimson-soft', ALLOW: 'text-kelly-deep dark:text-kelly-soft', REVIEW: 'text-flame-deep dark:text-flame-soft', BLOCK: 'text-crimson-deep dark:text-crimson-soft', INFO: 'text-aqua-deep dark:text-aqua-soft' }
+export const HEX = { SAFE: '#4FB06D', LOW: '#F07857', HIGH: '#B82C34', CRITICAL: '#B82C34', ALLOW: '#4FB06D', REVIEW: '#F07857', BLOCK: '#B82C34', INFO: '#43A5BE', AI: '#5C62D6', HEALTHY: '#53DA5A' }
 export const levelOfScore = (s) => (s >= 80 ? 'CRITICAL' : s >= 60 ? 'HIGH' : s >= 30 ? 'LOW' : 'SAFE')
 
 export function Badge({ value, children, className, dot }) {
   const v = value || children
   return (
-    <span className={cx('inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-semibold tracking-wide ring-1 ring-inset whitespace-nowrap', TONE[v] || TONE.NONE, className)}>
+    <span className={cx('inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide ring-1 ring-inset whitespace-nowrap', TONE[v] || TONE.NONE, className)}>
       {dot && <span className="h-1.5 w-1.5 rounded-full bg-current" />}{children || value}
     </span>
   )
 }
 
 export const Card = forwardRef(function Card({ className, children, ...p }, ref) {
-  return <section ref={ref} className={cx('glass min-w-0 rounded-xl', className)} {...p}>{children}</section>
+  return <section ref={ref} className={cx('glass min-w-0 rounded-2xl transition-shadow', className)} {...p}>{children}</section>
 })
 
 export function CardHeader({ icon: Icon, title, subtitle, right, className }) {
   return (
-    <div className={cx('flex items-start justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] px-5 py-3.5', className)}>
+    <div className={cx('flex items-start justify-between gap-3 border-b border-ink/10 dark:border-mist/10 px-5 py-3.5', className)}>
       <div className="flex items-center gap-3 min-w-0">
-        {Icon && <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/20"><Icon size={16} /></span>}
+        {Icon && <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-royal/10 text-royal-deep dark:text-royal-soft ring-1 ring-royal/25"><Icon size={16} /></span>}
         <div className="min-w-0">
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{title}</h2>
-          {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{subtitle}</p>}
+          <h2 className="text-sm font-semibold text-ink dark:text-white truncate">{title}</h2>
+          {subtitle && <p className="text-xs text-ink/60 dark:text-mist/60 truncate">{subtitle}</p>}
         </div>
       </div>
       {right}
@@ -65,9 +68,9 @@ export function PageHeader({ eyebrow, title, subtitle, actions }) {
   return (
     <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
-        {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600 dark:text-blue-400">{eyebrow}</p>}
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 dark:text-white md:text-[28px]">{title}</h1>
-        {subtitle && <p className="mt-1 max-w-3xl text-sm text-slate-600 dark:text-slate-400">{subtitle}</p>}
+        {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-aqua-deep dark:text-aqua-soft">{eyebrow}</p>}
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink dark:text-white md:text-[28px]">{title}</h1>
+        {subtitle && <p className="mt-1 max-w-3xl text-sm text-ink/65 dark:text-mist/65">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
     </div>
@@ -75,29 +78,31 @@ export function PageHeader({ eyebrow, title, subtitle, actions }) {
 }
 
 const BTN = {
-  primary: 'bg-blue-600 text-white hover:bg-blue-500 shadow-[0_8px_24px_-10px_rgba(37,99,235,.8)]',
-  secondary: 'bg-white text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 dark:bg-white/[0.04] dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/[0.08]',
-  danger: 'bg-red-600/90 text-white hover:bg-red-500',
-  success: 'bg-emerald-600/90 text-white hover:bg-emerald-500',
-  ghost: 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.06]',
+  primary: 'bg-flame text-ink font-semibold hover:bg-flame/90 shadow-[0_10px_28px_-12px_rgba(240,120,87,.7)]',
+  secondary: 'bg-white text-ink ring-1 ring-inset ring-ink/15 hover:bg-mist/40 dark:bg-white/[0.06] dark:text-white dark:ring-mist/15 dark:hover:bg-white/[0.1]',
+  teal: 'bg-aqua text-ink font-semibold hover:bg-aqua/90 shadow-[0_10px_28px_-12px_rgba(67,165,190,.7)]',
+  indigo: 'bg-royal text-white font-semibold hover:bg-royal/90 shadow-[0_10px_28px_-12px_rgba(92,98,214,.7)]',
+  danger: 'bg-crimson text-white font-semibold hover:bg-crimson/90',
+  success: 'bg-kelly text-ink font-semibold hover:bg-kelly/90',
+  ghost: 'text-ink/70 hover:bg-ink/5 dark:text-mist/80 dark:hover:bg-white/[0.06]',
 }
 export function Button({ variant = 'secondary', icon: Icon, className, children, size = 'md', ...p }) {
   return (
-    <button className={cx('inline-flex items-center justify-center gap-2 rounded-lg font-medium transition disabled:cursor-not-allowed disabled:opacity-40',
-      size === 'sm' ? 'px-2.5 py-1.5 text-xs' : 'px-3.5 py-2 text-sm', BTN[variant], className)} {...p}>
-      {Icon && <Icon size={size === 'sm' ? 13 : 15} />}{children}
+    <button className={cx('inline-flex items-center justify-center gap-2 rounded-xl font-medium transition disabled:cursor-not-allowed disabled:opacity-40',
+      size === 'sm' ? 'px-2.5 py-1.5 text-xs' : size === 'lg' ? 'px-6 py-3.5 text-base' : 'px-3.5 py-2 text-sm', BTN[variant], className)} {...p}>
+      {Icon && <Icon size={size === 'sm' ? 13 : size === 'lg' ? 18 : 15} />}{children}
     </button>
   )
 }
 
-export function Stat({ label, value, icon: Icon, tone = 'text-slate-900 dark:text-white', hint }) {
+export function Stat({ label, value, icon: Icon, tone = 'text-ink dark:text-white', hint }) {
   return (
     <Card className="p-4">
-      <div className="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-        <span>{label}</span>{Icon && <Icon size={15} className="text-slate-400 dark:text-slate-500" />}
+      <div className="flex items-center justify-between text-xs font-medium text-ink/55 dark:text-mist/55">
+        <span>{label}</span>{Icon && <Icon size={15} className="text-ink/40 dark:text-mist/45" />}
       </div>
       <div className={cx('mt-2 font-mono text-[28px] font-semibold leading-none tabular-nums', tone)}>{value}</div>
-      {hint && <div className="mt-1.5 text-[11px] text-slate-500 dark:text-slate-500">{hint}</div>}
+      {hint && <div className="mt-1.5 text-[11px] text-ink/55 dark:text-mist/50">{hint}</div>}
     </Card>
   )
 }
@@ -118,19 +123,19 @@ export function ScoreBar({ score, level }) {
   return (
     <div>
       <div className="flex items-baseline justify-between">
-        <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Risk score</span>
-        <span className="font-mono text-2xl font-bold text-slate-900 dark:text-white">
+        <span className="text-sm font-semibold text-ink/70 dark:text-mist/70">Risk score</span>
+        <span className="font-mono text-2xl font-bold text-ink dark:text-white">
           {score}
-          <span className="text-sm font-medium text-slate-400 dark:text-slate-500"> / 100</span>
+          <span className="text-sm font-medium text-ink/45 dark:text-mist/50"> / 100</span>
         </span>
       </div>
-      <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+      <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-ink/10 dark:bg-white/10">
         <div
           className="h-full rounded-full transition-all"
           style={{ width: `${Math.max(2, score)}%`, background: color }}
         />
       </div>
-      <div className="mt-1.5 flex justify-between text-[11px] font-medium text-slate-500 dark:text-slate-400">
+      <div className="mt-1.5 flex justify-between text-[11px] font-medium text-ink/55 dark:text-mist/50">
         <span>0 · Safe</span>
         <span>30 · Review</span>
         <span>60 · Block</span>
@@ -150,14 +155,14 @@ export const fmtTime = (ts) => new Date(ts).toLocaleString('en-IN', {
 export const fmtArgs = (args) => Object.entries(args).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(', ')
 
 export function Empty({ children }) {
-  return <div className="px-5 py-10 text-center text-sm text-slate-500 dark:text-slate-500">{children}</div>
+  return <div className="px-5 py-10 text-center text-sm text-ink/55 dark:text-mist/50">{children}</div>
 }
 
 export function EmptyState({ title, body }) {
   return (
     <Card className="p-8 text-center">
-      <div className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</div>
-      <p className="mx-auto mt-1 max-w-md text-sm text-slate-500 dark:text-slate-400">{body}</p>
+      <div className="text-base font-semibold text-ink dark:text-white">{title}</div>
+      <p className="mx-auto mt-1 max-w-md text-sm text-ink/60 dark:text-mist/60">{body}</p>
     </Card>
   )
 }

@@ -28,8 +28,8 @@ export default function Queue() {
             <article key={r.id} className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{r.userName} — {r.goal}</h2>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <h2 className="text-lg font-bold text-ink dark:text-white">{r.userName} — {r.goal}</h2>
+                  <p className="text-sm text-ink/60 dark:text-mist/60">
                     {r.id} · {r.userEmail} · {timeAgo(r.ts)} · {attackTypePlain(r.scan.attackType)}
                   </p>
                 </div>

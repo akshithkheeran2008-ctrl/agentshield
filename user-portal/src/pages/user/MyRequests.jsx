@@ -25,15 +25,15 @@ export default function MyRequests() {
             <Card key={r.id} className="transition hover:-translate-y-0.5">
               <Link to={`/requests/${r.id}`} className="block px-4 py-3.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-sm font-bold text-slate-900 dark:text-slate-100">{r.name} — {r.goal}</span>
+                  <span className="text-sm font-bold text-ink dark:text-white">{r.name} — {r.goal}</span>
                   <span className="flex items-center gap-2">
                     <Badge value={r.scan.level}>
                       {r.scan.level === 'SAFE' ? 'Safe' : r.scan.level === 'LOW' ? 'Needs review' : 'Blocked'} · {r.scan.score}/100
                     </Badge>
-                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">{statusText(r.status).label}</span>
+                    <span className="text-xs font-semibold text-ink/70 dark:text-mist/60">{statusText(r.status).label}</span>
                   </span>
                 </div>
-                <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <div className="mt-1 text-xs text-ink/60 dark:text-mist/60">
                   {r.id} · {timeAgo(r.ts)} · {r.agent.calls.length} action{r.agent.calls.length === 1 ? '' : 's'} planned ·{' '}
                   {r.agent.calls.filter((c) => c.status === 'EXECUTED').length} ran,{' '}
                   {r.agent.calls.filter((c) => c.status === 'BLOCKED').length} blocked

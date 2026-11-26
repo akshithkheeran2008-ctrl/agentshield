@@ -11,6 +11,7 @@ function toCsv(rows) {
 }
 
 const DECISION_BADGE = { BLOCKED: 'BLOCKED', APPROVED: 'APPROVED', REVIEW: 'REVIEW' }
+const SEVERITY_BADGE = { CRITICAL: 'CRITICAL', HIGH: 'HIGH', LOW: 'LOW', SAFE: 'SAFE', INFO: 'INFO', NONE: 'NONE' }
 
 export default function Events() {
   const { store } = useStore()
@@ -65,7 +66,7 @@ export default function Events() {
             key={v}
             type="button"
             onClick={() => setFilter(v)}
-            className={cx('rounded-full px-3 py-1.5 text-sm font-semibold', filter === v ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.08]')}
+            className={cx('rounded-full px-3 py-1.5 text-sm font-semibold transition', filter === v ? 'bg-flame text-ink' : 'bg-ink/[0.06] dark:bg-white/[0.06] text-ink/70 dark:text-mist/70 hover:bg-ink/10 dark:hover:bg-white/[0.1]')}
           >
             {label}
           </button>
@@ -79,25 +80,27 @@ export default function Events() {
         <Card className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-white/[0.06] text-left text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-500">
+              <tr className="border-b border-ink/10 dark:border-mist/10 text-left text-[10px] uppercase tracking-wider text-ink/50 dark:text-mist/50">
                 <th className="px-4 py-2.5 first:pl-5">Time</th>
                 <th className="px-4 py-2.5">Event</th>
-                <th className="px-4 py-2.5">User</th>
+                <th className="px-4 py-2.5">Severity</th>
                 <th className="px-4 py-2.5">Risk</th>
                 <th className="px-4 py-2.5">Decision</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((e) => (
-                <tr key={e.id} className="border-b border-slate-100 dark:border-white/[0.04] last:border-0 transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.02]">
-                  <td className="whitespace-nowrap py-2.5 pl-5 pr-4 font-mono text-slate-500 dark:text-slate-400">{fmtTime(e.ts)}</td>
+                <tr key={e.id} className="border-b border-ink/[0.06] dark:border-mist/[0.05] last:border-0 transition-colors hover:bg-ink/[0.03] dark:hover:bg-white/[0.03]">
+                  <td className="whitespace-nowrap py-2.5 pl-5 pr-4 font-mono text-ink/55 dark:text-mist/55">{fmtTime(e.ts)}</td>
                   <td className="px-4 py-2.5">
-                    <span className="block text-sm font-semibold text-slate-800 dark:text-slate-200">{e.type}</span>
-                    <span className="block text-sm text-slate-600 dark:text-slate-400">{e.description}</span>
-                    {e.reason && <span className="block text-xs text-slate-500 dark:text-slate-400">{e.reason}</span>}
+                    <span className="block text-sm font-semibold text-ink dark:text-white">{e.type}</span>
+                    <span className="block text-sm text-ink/65 dark:text-mist/65">{e.description}</span>
+                    <span className="block text-xs text-ink/50 dark:text-mist/50">{e.userName}{e.reason ? ` · ${e.reason}` : ''}</span>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-2.5 text-slate-600 dark:text-slate-400">{e.userName}</td>
-                  <td className="whitespace-nowrap px-4 py-2.5 font-mono font-bold text-slate-800 dark:text-slate-200">{e.risk}/100</td>
+                  <td className="whitespace-nowrap px-4 py-2.5">
+                    <Badge value={SEVERITY_BADGE[e.severity] || 'NONE'}>{e.severity || '—'}</Badge>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2.5 font-mono font-bold text-ink dark:text-white">{e.risk}/100</td>
                   <td className="whitespace-nowrap px-4 py-2.5">
                     <Badge value={DECISION_BADGE[e.decision] || 'NONE'}>{e.decision}</Badge>
                   </td>

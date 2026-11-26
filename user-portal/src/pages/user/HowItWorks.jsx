@@ -37,9 +37,9 @@ export default function HowItWorks() {
       <div className="grid gap-3 sm:grid-cols-2">
         {STEPS.map((s) => (
           <Card key={s.title} className="p-5">
-            <s.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            <h2 className="mt-2 text-base font-bold text-slate-900 dark:text-slate-100">{s.title}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{s.body}</p>
+            <s.icon className="h-6 w-6 text-royal-deep dark:text-royal-soft" />
+            <h2 className="mt-2 text-base font-bold text-ink dark:text-white">{s.title}</h2>
+            <p className="mt-1 text-sm leading-relaxed text-ink/70 dark:text-mist/60">{s.body}</p>
           </Card>
         ))}
       </div>
@@ -48,9 +48,9 @@ export default function HowItWorks() {
         <CardHeader title="What the score means" />
         <div className="space-y-2 p-5">
           {RISK_BANDS.map((b) => (
-            <div key={b.level} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] px-3 py-2.5 text-sm">
-              <span className="font-bold text-slate-800 dark:text-slate-200">{b.plain}</span>
-              <span className="text-slate-600 dark:text-slate-400">
+            <div key={b.level} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-ink/12 dark:border-mist/12 bg-white dark:bg-white/[0.02] px-3 py-2.5 text-sm">
+              <span className="font-bold text-ink dark:text-white">{b.plain}</span>
+              <span className="text-ink/70 dark:text-mist/60">
                 {b.level === 'SAFE' && 'Ordinary request — the assistant runs it.'}
                 {b.level === 'LOW' && 'Looks off, not clearly an attack — an admin checks it first.'}
                 {b.level === 'HIGH' && 'Risky — the actions are blocked before they run.'}
@@ -63,7 +63,7 @@ export default function HowItWorks() {
 
       <Card>
         <CardHeader icon={XCircle} title="What we never do" />
-        <ul className="list-disc space-y-1.5 p-5 pl-10 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        <ul className="list-disc space-y-1.5 p-5 pl-10 text-sm leading-relaxed text-ink/70 dark:text-mist/60">
           <li>Never move real money or call a real payment service.</li>
           <li>Never send a real email — drafts only, and only inside the sandbox.</li>
           <li>Never read a real account, mailbox or file — all data is synthetic demo data.</li>

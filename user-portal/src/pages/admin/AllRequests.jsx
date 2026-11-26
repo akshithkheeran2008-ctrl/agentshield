@@ -57,19 +57,19 @@ export default function AllRequests() {
           {list.map((r) => (
             <Card key={r.id} className="px-4 py-3.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <Link to={`/admin/requests/${r.id}`} className="text-sm font-bold text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400">
+                <Link to={`/admin/requests/${r.id}`} className="text-sm font-bold text-ink dark:text-white hover:text-flame dark:hover:text-aqua-soft">
                   {r.userName} — {r.name}: {r.goal}
                 </Link>
                 <span className="flex items-center gap-2">
                   <Badge value={r.scan.level}>{r.scan.level} · {r.scan.score}/100</Badge>
-                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">{statusText(r.status).label}</span>
+                  <span className="text-xs font-semibold text-ink/70 dark:text-mist/60">{statusText(r.status).label}</span>
                 </span>
               </div>
-              <div className="mt-1 flex flex-wrap items-center gap-x-3 text-xs text-slate-500 dark:text-slate-400">
+              <div className="mt-1 flex flex-wrap items-center gap-x-3 text-xs text-ink/60 dark:text-mist/60">
                 <span>{r.id} · {timeAgo(r.ts)}</span>
                 <span>{r.userEmail}</span>
-                <Link to={`/admin/requests/${r.id}`} className="font-semibold text-blue-600 dark:text-blue-400">Open request →</Link>
-                <Link to={`/admin/users/${encodeURIComponent(r.userEmail)}`} className="font-semibold text-blue-600 dark:text-blue-400">
+                <Link to={`/admin/requests/${r.id}`} className="font-semibold text-flame dark:text-aqua-soft">Open request →</Link>
+                <Link to={`/admin/users/${encodeURIComponent(r.userEmail)}`} className="font-semibold text-flame dark:text-aqua-soft">
                   Open {r.userName}’s panel →
                 </Link>
               </div>
