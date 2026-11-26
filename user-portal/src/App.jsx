@@ -7,6 +7,11 @@ import RequestDetail from './pages/user/RequestDetail.jsx'
 import HowItWorks from './pages/user/HowItWorks.jsx'
 import PromptLab from './pages/user/PromptLab.jsx'
 import AdminDashboard from './pages/admin/Dashboard.jsx'
+import ProductOverview from './pages/admin/ProductOverview.jsx'
+import Simulator from './pages/admin/Simulator.jsx'
+import Agents from './pages/admin/Agents.jsx'
+import Architecture from './pages/admin/Architecture.jsx'
+import About from './pages/admin/About.jsx'
 import Queue from './pages/admin/Queue.jsx'
 import AllRequests from './pages/admin/AllRequests.jsx'
 import UserPanel from './pages/admin/UserPanel.jsx'
@@ -24,6 +29,11 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/overview" element={<ProductOverview />} />
+          <Route path="/admin/simulator" element={<Simulator />} />
+          <Route path="/admin/agents" element={<Agents />} />
+          <Route path="/admin/architecture" element={<Architecture />} />
+          <Route path="/admin/about" element={<About />} />
           <Route path="/admin/queue" element={<Queue />} />
           <Route path="/admin/requests" element={<AllRequests />} />
           <Route path="/admin/requests/:id" element={<RequestDetail />} />
