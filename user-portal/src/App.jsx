@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
+import Landing from './pages/Landing.jsx'
 import SignIn from './pages/SignIn.jsx'
 import Home from './pages/user/Home.jsx'
 import MyRequests from './pages/user/MyRequests.jsx'
@@ -22,7 +23,15 @@ import { useStore } from './store.jsx'
 export default function App() {
   const { session } = useStore()
 
-  if (!session) return <SignIn />
+  if (!session) {
+    return (
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    )
+  }
 
   if (session.role === 'admin') {
     return (
