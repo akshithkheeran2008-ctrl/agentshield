@@ -184,7 +184,7 @@ Health of the project, honestly: this README does not quote a test count, a cove
 
 ## Deploy
 
-Netlify: import the repo and leave the Base directory empty. `netlify.toml` sets the build command to `npm run build`, publishes `dist`, uses Node 20 and adds the SPA fallback. Optionally set `VITE_API_URL` to a hosted FastAPI instance.
+Vercel: import the repo and leave the Root Directory empty. `vercel.json` sets the framework to Vite, the build command to `npm run build`, publishes `dist`, and adds the SPA fallback rewrite. Optionally set `VITE_API_URL` to a hosted FastAPI instance.
 
 Live deployment: [agentshield-05.vercel.app/dashboard](https://agentshield-05.vercel.app/dashboard)
 
